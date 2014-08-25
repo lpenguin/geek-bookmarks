@@ -32,9 +32,12 @@ class MainServlet extends GeekbookmarksStack with DatabaseSessionSupport with Ja
     ("result" -> "ok") ~ ("message" -> "db created")
   }
 
-  def makeTag(name:String, tagQuery:Query[Tag]) =
-    if(tagQuery.size >= 1) tagQuery.head
+  def makeTag(name:String) = {
+    val tagQuery = tags where (t => t.name === name)
+
+    if (tagQuery.size >= 1) tagQuery.head
     else tags insert new Tag(name)
+  }
 
   get("/p"){
     val json = parse("""
@@ -48,8 +51,8 @@ class MainServlet extends GeekbookmarksStack with DatabaseSessionSupport with Ja
     val record = records insert json.extract[Record]
 
     val recordTags = (json \ "tags")
-      .extract[List[String]]
-      .map(name => makeTag(name, tags.where(t => t.name === name)))
+      .extract[List[String]] map makeTag
+
 
     for(tag <- recordTags){
       record.tags.associate(tag)
