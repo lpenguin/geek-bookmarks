@@ -22,11 +22,13 @@ object GeekbookmarksBuild extends Build {
       scalaVersion := ScalaVersion,
       resolvers += Classpaths.typesafeReleases,
       libraryDependencies ++= Seq(
+        "ch.qos.logback" % "logback-classic" % "1.1.1" % "runtime",
         "org.scalatra" %% "scalatra-json" % "2.3.0",
         "org.json4s"   %% "json4s-jackson" % "3.2.9",
         "org.json4s"   %% "json4s-ext"     % "3.2.9",
         "org.squeryl" %% "squeryl" % "0.9.5-7",
         "com.h2database" % "h2" % "1.3.166",
+        "mysql" % "mysql-connector-java" % "5.1.32",
         "c3p0" % "c3p0" % "0.9.1.2",
         "org.scalatra" %% "scalatra" % ScalatraVersion,
         "org.scalatra" %% "scalatra-scalate" % ScalatraVersion,

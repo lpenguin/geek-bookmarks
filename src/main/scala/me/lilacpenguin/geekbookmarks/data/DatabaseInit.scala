@@ -12,15 +12,15 @@ import org.squeryl.adapters.H2Adapter
 trait DatabaseInit {
   val logger = LoggerFactory.getLogger(getClass)
 
-  val databaseUsername = "root"
-  val databasePassword = ""
-  val databaseConnection = "jdbc:h2:mem:squeryltryout"
+  val databaseUsername = "admin"
+  val databasePassword = "admin123"
+  val databaseConnection = "jdbc:mysql://localhost/geekbm"
 
   var cpds = new ComboPooledDataSource
 
   def configureDb() {
     logger.info("configureDb()")
-    cpds.setDriverClass("org.h2.Driver")
+    cpds.setDriverClass("com.mysql.jdbc.Driver")
     cpds.setJdbcUrl(databaseConnection)
     cpds.setUser(databaseUsername)
     cpds.setPassword(databasePassword)

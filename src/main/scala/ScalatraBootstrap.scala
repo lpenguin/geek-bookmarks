@@ -6,7 +6,7 @@ import javax.servlet.ServletContext
 class ScalatraBootstrap extends LifeCycle with DatabaseInit{
   override def init(context: ServletContext) {
     configureDb()
-    context.mount(new MainServlet, "/*")
+    context.mount(new ApiServlet, "/api/*")
   }
 
   override def destroy(context:ServletContext): Unit ={

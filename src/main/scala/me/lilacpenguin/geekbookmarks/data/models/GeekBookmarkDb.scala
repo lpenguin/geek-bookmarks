@@ -27,7 +27,8 @@ class Tag(val id:Long, val name:String) extends KeyedEntity[Long]{
   lazy val records = GeekBookmarkDb.tagsRecords.left(this)
 }
 
-case class Record(id:Long,
+case class Record(
+             id:Long,
              name:String,
              description:String,
              url:String
