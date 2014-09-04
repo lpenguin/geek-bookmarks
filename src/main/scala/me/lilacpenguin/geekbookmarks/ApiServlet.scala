@@ -42,7 +42,7 @@ class ApiServlet extends GeekbookmarksStack with DatabaseSessionSupport with Jac
   post("/addLink"){
     logger.info("addLink: {}", request.body)
     val json = parse(request.body)
-
+    logger.info("json: {}", json)
     val record = records insert json.extract[Record]
 
     val recordTags = (json \ "tags")
