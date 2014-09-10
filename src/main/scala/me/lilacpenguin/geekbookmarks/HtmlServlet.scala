@@ -20,4 +20,9 @@ class HtmlServlet extends GeekbookmarksStack with DatabaseSessionSupport{
     val items = from(records)(r => select(r)).toList
     jade("index", "items" -> items)
   }
+
+  get("/tags/:tag"){
+    val items = from(records)(r => select(r)).toList
+    jade("index", "items" -> items)
+  }
 }
