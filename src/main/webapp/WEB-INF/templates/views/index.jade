@@ -1,16 +1,17 @@
-- attributes("title") = "Scalatra: a tiny, Sinatra-like web framework for Scala"
-- attributes("headline") = "Welcome to Scalatra"
+- attributes("title") = "Geekbookmarks"
+- attributes("headline") = "Geekbookmarks"
 -import me.lilacpenguin.geekbookmarks.data.models.Record
 -@ val items: List[Record]
 -@ val bar: String = "this is the default value"
 
-p
-  -for(item <- items)
-    p
+-for(item <- items)
+  .post
+    h4.post-title
       a(href="#{item.url}")
         -if(!item.faviconUrl.isEmpty)
           img(src="#{item.faviconUrl}")
         =item.name
-      p
-        -for(tag <- item.tags)
-          a(href="/tags/#{tag.id}") =tag.name
+    p.post-meta =item.addedAt
+    p.tags
+    -for(tag <- item.tags)
+      a(href="/tags/#{tag.id}") =tag.name

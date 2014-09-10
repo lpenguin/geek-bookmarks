@@ -4,7 +4,7 @@ import org.squeryl.dsl.CompositeKey2
 import org.squeryl.{KeyedEntity, Schema}
 import org.squeryl.PrimitiveTypeMode._
 
-
+import java.sql.Timestamp
 /**
  * Created by nikita on 17.08.14.
  */
@@ -21,13 +21,7 @@ object GeekBookmarkDb extends Schema {
     manyToManyRelation(tags, records).
     via[TagRecord]((t,r,tr) => (r.id === tr.recordId, t.id === tr.tagId))
 
-
-  def update() = {
-    tags.deleteWhere(t => t.id === 1)
-    tagsRecords
-  }
-
-}
+ }
 
 class Tag(val id:Long, val name:String) extends KeyedEntity[Long]{
   def this(name:String) = this(0, name)
@@ -39,9 +33,14 @@ case class Record(
              name:String,
              description:String,
              url:String,
-             faviconUrl:String
+             faviconUrl:String,
+             addedAt:Timestamp
 ) extends KeyedEntity[Long]{
-  def this(name:String, description:String, url:String, faviconUrl: String) = this(0, name, description, url, faviconUrl)
+
+  def this(name:String, description:String, url:String, faviconUrl: String) = {
+    this(0, name, description, url, faviconUrl, null)
+  }
+
   lazy val tags = GeekBookmarkDb.tagsRecords.right(this)
 }
 
