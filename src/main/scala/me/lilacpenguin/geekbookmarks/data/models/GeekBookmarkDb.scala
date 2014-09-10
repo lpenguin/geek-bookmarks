@@ -29,12 +29,12 @@ class Tag(val id:Long, val name:String) extends KeyedEntity[Long]{
 }
 
 case class Record(
-             id:Long,
+             id:Long = 0,
              name:String,
              description:String,
              url:String,
              faviconUrl:String,
-             addedAt:Timestamp
+             addedAt:Timestamp = null
 ) extends KeyedEntity[Long]{
 
   def this(name:String, description:String, url:String, faviconUrl: String) = {

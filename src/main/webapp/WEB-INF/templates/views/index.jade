@@ -12,6 +12,6 @@
           img(src="#{item.faviconUrl}")
         =item.name
     p.post-meta =item.addedAt
-    p.tags
     -for(tag <- item.tags)
-      a(href="/tags/#{tag.id}") =tag.name
+      a.badge(href="/tags/#{tag.id}") =tag.name
+    hr
