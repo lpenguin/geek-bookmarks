@@ -12,17 +12,20 @@ class HtmlServlet extends GeekbookmarksStack with DatabaseSessionSupport{
     contentType="text/html"
   }
 
-  get("/hello"){
-    jade("fifr")
-  }
-
   get("/"){
     val items = from(records)(r => select(r)).toList
     jade("index", "items" -> items)
   }
 
   get("/tags/:tag"){
-    val items = from(records)(r => select(r)).toList
+    val tagId = params("tag").toInt
+
+    val items = from(records, tagsRecords)((r, tr)=>
+      where(tr.tagId === tagId and r.id === tr.recordId)
+      select r
+    ).toList
+
+
     jade("index", "items" -> items)
   }
 }
