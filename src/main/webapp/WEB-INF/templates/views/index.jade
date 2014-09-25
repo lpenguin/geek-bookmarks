@@ -11,7 +11,10 @@
         -if(!item.faviconUrl.isEmpty)
           img(src="#{item.faviconUrl}")
         =item.name
-    p.post-meta =item.addedAt
-    -for(tag <- item.tags)
-      a.badge(href="/tags/#{tag.id}") =tag.name
+    p.post-meta
+      =item.addedAt
+      -for(tag <- item.tags)
+        a.badge(href="/tags/#{tag.id}") =tag.name
+    p.post-meta =item.description
+
     hr
