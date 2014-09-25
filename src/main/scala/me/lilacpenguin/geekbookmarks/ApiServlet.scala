@@ -38,7 +38,13 @@ class ApiServlet extends GeekbookmarksStack with DatabaseSessionSupport with Jac
     if (tagQuery.size >= 1) tagQuery.head
     else tags insert new Tag(name)
   }
-
+  get("/dropdb"){
+    GeekBookmarkDb.tagsRecords.deleteWhere(r => 1 === 1)
+    GeekBookmarkDb.tags.deleteWhere(r => 1 === 1)
+    GeekBookmarkDb.records.deleteWhere(r => 1 === 1)
+    GeekBookmarkDb.drop
+    ("result" -> "ok") ~ ("message" -> "db created")
+  }
   post("/addLink"){
     logger.info("addLink: {}", request.body)
     val json = parse(request.body)

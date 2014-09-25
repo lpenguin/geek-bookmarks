@@ -16,11 +16,9 @@ class TagRecord(val tagId:Long, val recordId:Long) extends KeyedEntity[Composite
 object GeekBookmarkDb extends Schema {
   val tags = table[Tag]
   val records = table[Record]
-
   val tagsRecords =
     manyToManyRelation(tags, records).
-    via[TagRecord]((t,r,tr) => (r.id === tr.recordId, t.id === tr.tagId))
-
+      via[TagRecord]((t,r,tr) => (r.id === tr.recordId, t.id === tr.tagId))
  }
 
 class Tag(val id:Long, val name:String) extends KeyedEntity[Long]{

@@ -1,0 +1,4 @@
+url: ${proto}://${host}/api/db
+method: get
+body:
+  foo: bar
