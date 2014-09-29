@@ -14,7 +14,7 @@
     p.post-meta
       =item.addedAt
       -for(tag <- item.tags)
-        a.badge(href="/tags/#{tag.id}") =tag.name
+        a.badge(href="/tags/#{tag}") =tag
     p.post-meta =item.description
 
     hr

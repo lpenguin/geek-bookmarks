@@ -1,16 +1,20 @@
-import me.lilacpenguin.geekbookmarks._
-import me.lilacpenguin.geekbookmarks.data.DatabaseInit
-import org.scalatra._
 import javax.servlet.ServletContext
 
-class ScalatraBootstrap extends LifeCycle with DatabaseInit{
-  override def init(context: ServletContext) {
-    configureDb()
-    context.mount(new ApiServlet, "/api/*")
-    context.mount(new HtmlServlet, "/*")
-  }
+import com.mongodb.casbah.Imports._
+import me.lilacpenguin.geekbookmarks.{HtmlServlet, ApiServlet}
+import org.scalatra.LifeCycle
 
-  override def destroy(context:ServletContext): Unit ={
-    closeDbConnection()
+class ScalatraBootstrap extends LifeCycle {
+  val mongoClient = MongoClient()
+  override def init(context: ServletContext) {
+    // As you can see, there's not much to do in order to get MongoDb working with Scalatra.
+    // We're connecting with default settings - localhost on port 27017 - by calling MongoClient() with no arguments.
+    val records = mongoClient("geekbm")("records")
+    // pass a reference to the Mongo collection into your servlet when you mount it at application start:
+    context.mount(new ApiServlet(records), "/api/*")
+    context.mount(new HtmlServlet(records), "/api/*")
+  }
+  override def destroy(context: ServletContext) {
+    mongoClient.close
   }
 }

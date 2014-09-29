@@ -11,6 +11,9 @@ object GeekbookmarksBuild extends Build {
   val Version = "0.1.0-SNAPSHOT"
   val ScalaVersion = "2.11.1"
   val ScalatraVersion = "2.3.0"
+//  val novusRels = "repo.novus rels" at "http://repo.novus.com/releases/"
+//  val novusSnaps = "repo.novus snaps" at "http://repo.novus.com/snapshots/"
+//  val salat = "com.novus" %% "salat-core" % "0.0.7"
 
   lazy val project = Project (
     "geek-bookmarks",
@@ -22,14 +25,12 @@ object GeekbookmarksBuild extends Build {
       scalaVersion := ScalaVersion,
       resolvers += Classpaths.typesafeReleases,
       libraryDependencies ++= Seq(
+        "com.novus" %% "salat" % "1.9.9",
+        "org.mongodb" %% "casbah" % "2.7.2",
         "ch.qos.logback" % "logback-classic" % "1.1.1" % "runtime",
         "org.scalatra" %% "scalatra-json" % "2.3.0",
         "org.json4s"   %% "json4s-jackson" % "3.2.9",
         "org.json4s"   %% "json4s-ext"     % "3.2.9",
-        "org.squeryl" %% "squeryl" % "0.9.5-7",
-        "com.h2database" % "h2" % "1.3.166",
-        "mysql" % "mysql-connector-java" % "5.1.32",
-        "c3p0" % "c3p0" % "0.9.1.2",
         "org.scalatra" %% "scalatra" % ScalatraVersion,
         "org.scalatra" %% "scalatra-scalate" % ScalatraVersion,
         "org.scalatra" %% "scalatra-specs2" % ScalatraVersion % "test",
