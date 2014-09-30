@@ -1,0 +1,3 @@
+url: ${proto}://${host}/api/records
+method: get
+body: ''

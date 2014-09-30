@@ -12,7 +12,7 @@ class ScalatraBootstrap extends LifeCycle {
     val records = mongoClient("geekbm")("records")
     // pass a reference to the Mongo collection into your servlet when you mount it at application start:
     context.mount(new ApiServlet(records), "/api/*")
-    context.mount(new HtmlServlet(records), "/api/*")
+    context.mount(new HtmlServlet(records), "/*")
   }
   override def destroy(context: ServletContext) {
     mongoClient.close

@@ -4,3 +4,6 @@ body:
   description: foo description
   url: http://bla-bla.bla
   faviconUrl: ""
+  tags:
+    - test
+    - uaua
