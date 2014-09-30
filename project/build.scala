@@ -5,20 +5,43 @@ import org.scalatra.sbt.PluginKeys._
 import com.mojolly.scalate.ScalatePlugin._
 import ScalateKeys._
 
+import sbtassembly.Plugin._
+import sbtassembly.Plugin.AssemblyKeys._
+
 object GeekbookmarksBuild extends Build {
   val Organization = "me.lilacpenguin"
   val Name = "geek-bookmarks"
   val Version = "0.1.0-SNAPSHOT"
   val ScalaVersion = "2.11.1"
   val ScalatraVersion = "2.3.0"
-//  val novusRels = "repo.novus rels" at "http://repo.novus.com/releases/"
-//  val novusSnaps = "repo.novus snaps" at "http://repo.novus.com/snapshots/"
-//  val salat = "com.novus" %% "salat-core" % "0.0.7"
+
+  val myAssemblySettings = assemblySettings ++ Seq(
+
+    // handle conflicts during assembly task
+    mergeStrategy in assembly <<= (mergeStrategy in assembly) {
+      (old) => {
+        case "about.html" => MergeStrategy.first
+        case x => old(x)
+      }
+    },
+
+    // copy web resources to /webapp folder
+    resourceGenerators in Compile <+= (resourceManaged, baseDirectory) map {
+      (managedBase, base) =>
+        val webappBase = base / "src" / "main" / "webapp"
+        for {
+          (from, to) <- webappBase ** "*" x rebase(webappBase, managedBase / "main" / "webapp")
+        } yield {
+          Sync.copy(from, to)
+          to
+        }
+    }
+  )
 
   lazy val project = Project (
     "geek-bookmarks",
     file("."),
-    settings = ScalatraPlugin.scalatraWithJRebel ++ scalateSettings ++ Seq(
+    settings = ScalatraPlugin.scalatraWithJRebel ++ scalateSettings ++ assemblySettings ++ Seq(
       organization := Organization,
       name := Name,
       version := Version,
@@ -35,7 +58,7 @@ object GeekbookmarksBuild extends Build {
         "org.scalatra" %% "scalatra-scalate" % ScalatraVersion,
         "org.scalatra" %% "scalatra-specs2" % ScalatraVersion % "test",
         "ch.qos.logback" % "logback-classic" % "1.0.6" % "runtime",
-        "org.eclipse.jetty" % "jetty-webapp" % "9.1.3.v20140225" % "container",
+        "org.eclipse.jetty" % "jetty-webapp" % "9.1.3.v20140225" % "container;compile",
         "org.eclipse.jetty" % "jetty-plus" % "9.1.3.v20140225" % "container",
         "org.eclipse.jetty.orbit" % "javax.servlet" % "3.0.0.v201112011016" % "container;provided;test" artifacts (Artifact("javax.servlet", "jar", "jar"))
       ),
