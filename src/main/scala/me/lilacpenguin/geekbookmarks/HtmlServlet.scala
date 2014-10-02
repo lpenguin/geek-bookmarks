@@ -15,7 +15,7 @@ class HtmlServlet(records: MongoCollection) extends GeekbookmarksStack {
   }
 
   get("/"){
-    jade("index", "items" -> recordsDAO.find(MongoDBObject.empty).toList)
+    jade("index", "items" -> recordsDAO.find(MongoDBObject.empty).sort(orderBy = MongoDBObject("addedAt" -> -1)).toList)
   }
 //
 //  get("/tags/:tag"){
