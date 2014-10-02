@@ -1,3 +1,7 @@
 .post {
     margin-bottom: 30px;
 }
+
+.blog-title a {
+    color: #333;
+}

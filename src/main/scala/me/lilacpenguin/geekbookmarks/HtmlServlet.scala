@@ -3,7 +3,6 @@ package me.lilacpenguin.geekbookmarks
 import com.mongodb.casbah.Imports._
 import me.lilacpenguin.geekbookmarks.data.models.RecordDAO
 
-
 /**
  * Created by nikita on 03.09.14.
  */
@@ -16,6 +15,12 @@ class HtmlServlet(records: MongoCollection) extends GeekbookmarksStack {
 
   get("/"){
     jade("index", "items" -> recordsDAO.find(MongoDBObject.empty).sort(orderBy = MongoDBObject("addedAt" -> -1)).toList)
+  }
+
+  get("/tags/:tag"){
+    val tags = params("tag") :: Nil
+    val items = recordsDAO.find("tags" $in tags).toList
+    jade("index", "items" -> items)
   }
 //
 //  get("/tags/:tag"){
