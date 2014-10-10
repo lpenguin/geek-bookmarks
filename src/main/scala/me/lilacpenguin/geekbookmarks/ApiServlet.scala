@@ -36,6 +36,27 @@ class ApiServlet(recordsCollection: MongoCollection) extends GeekbookmarksStack 
     "result" -> recordsDAO.find(MongoDBObject("url" -> url)).nonEmpty
   }
 
+  get("/tags"){
+    val mapFunction = "" +
+      "function(){ \n"+
+      "    this.tags.map(function(tag, index){ \n"+
+      "        emit(tag, 1); \n" +
+      "    }); \n" +
+      "}\n"
+      
+	  val reduceFunction = "function(tag, values){ \n" +
+          " return Array.sum(values); \n" +
+          " }"
+   val json = ("name" -> "joe") ~ ("age" -> 35)
+    val result = recordsCollection.mapReduce(mapFunction, reduceFunction, MapReduceInlineOutput)
+    
+    /*" */
+    "result" -> result.map(o => {
+      ("tag" -> o.getAs[String]("_id")) ~ ("count" -> o.getAs[String]("value"))
+    }).toList
+    
+  }
+  
   error {
     case e =>
       logger.error("error-marker", e)
