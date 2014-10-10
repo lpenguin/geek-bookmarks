@@ -51,9 +51,9 @@ class ApiServlet(recordsCollection: MongoCollection) extends GeekbookmarksStack 
     val result = recordsCollection.mapReduce(mapFunction, reduceFunction, MapReduceInlineOutput)
     
     /*" */
-    "result" -> result.map(o => {
+    ("result" -> result.map(o => {
       ("tag" -> o.getAs[String]("_id")) ~ ("count" -> o.getAs[String]("value"))
-    }).toList
+    }).toList) ~ ("status" -> "ok")
     
   }
   
