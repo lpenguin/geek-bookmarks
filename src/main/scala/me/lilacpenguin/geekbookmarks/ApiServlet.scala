@@ -8,10 +8,10 @@ import org.scalatra.json.JacksonJsonSupport
 import org.slf4j.{Logger, LoggerFactory}
 import org.json4s.JsonDSL._
 
-class ApiServlet(records: MongoCollection) extends GeekbookmarksStack with JacksonJsonSupport {
+class ApiServlet(recordsCollection: MongoCollection) extends GeekbookmarksStack with JacksonJsonSupport {
   protected implicit val jsonFormats: Formats = DefaultFormats
   val logger = LoggerFactory.getLogger(getClass)
-  val recordsDAO = new RecordDAO(records)
+  val recordsDAO = new RecordDAO(recordsCollection)
   before() {
     contentType = formats("json")
   }
@@ -28,6 +28,12 @@ class ApiServlet(records: MongoCollection) extends GeekbookmarksStack with Jacks
     val json = parse(request.body)
     recordsDAO.insert(json.extract[Record])
     "status" -> "ok"
+  }
+
+  post("/hasRecord"){
+    val json = parse(request.body)
+    val url = (json \\ "url").extract[String]
+    "result" -> recordsDAO.find(MongoDBObject("url" -> url)).nonEmpty
   }
 
   error {
