@@ -1,0 +1,4 @@
+url: ${proto}://${host}/api/find
+method: get
+body:
+    url: ${url}

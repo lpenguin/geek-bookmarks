@@ -67,3 +67,4 @@ jrebel.lic
 
 # paulp script
 /.lib/
+src/main/webapp/bower_components

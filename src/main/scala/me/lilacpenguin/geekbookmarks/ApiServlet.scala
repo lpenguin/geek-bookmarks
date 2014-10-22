@@ -16,10 +16,6 @@ class ApiServlet(recordsCollection: MongoCollection) extends GeekbookmarksStack 
     contentType = formats("json")
   }
 
-//  get("/tags") {
-//    from(tags)(t => select(t)).toList
-//  }
-//
   get("/records"){
     recordsDAO.find(MongoDBObject.empty).toList
   }
@@ -30,10 +26,10 @@ class ApiServlet(recordsCollection: MongoCollection) extends GeekbookmarksStack 
     "status" -> "ok"
   }
 
-  post("/hasRecord"){
+  post("/find"){
     val json = parse(request.body)
     val url = (json \\ "url").extract[String]
-    "result" -> recordsDAO.find(MongoDBObject("url" -> url)).nonEmpty
+    "result" -> recordsDAO.findOne(MongoDBObject("url" -> url))
   }
 
   get("/tags"){
@@ -56,7 +52,7 @@ class ApiServlet(recordsCollection: MongoCollection) extends GeekbookmarksStack 
     }).toList) ~ ("status" -> "ok")
     
   }
-  
+
   error {
     case e =>
       logger.error("error-marker", e)

@@ -1,0 +1,20 @@
+{
+  "name": "webapp",
+  "version": "0.0.0",
+  "homepage": "https://github.com/lpenguin/geek-bookmarks",
+  "authors": [
+    "lpenguin <lpenguin@yandex.ru>"
+  ],
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "bootstrap": "~3.2.0",
+    "ionicons": "~1.5.2"
+  }
+}
