@@ -11,6 +11,9 @@
         -if(!item.faviconUrl.isEmpty)
           img(src="#{item.faviconUrl}")
         =item.name
+      a.remove-link(href="/records/remove/#{item.id}")
+        i.ion-close-round.remove-button
+
     p.post-meta
       =item.addedAt
       -for(tag <- item.tags)

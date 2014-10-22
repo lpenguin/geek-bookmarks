@@ -19,7 +19,14 @@ class HtmlServlet(records: MongoCollection) extends GeekbookmarksStack {
 
   get("/tags/:tag"){
     val tags = params("tag") :: Nil
-    val items = recordsDAO.find("tags" $in tags).toList
+    val items = recordsDAO.find("tags" $in tags).sort(orderBy = MongoDBObject("addedAt" -> -1)).toList
+    jade("index", "items" -> items)
+  }
+  
+  get("/records/remove/:ids"){
+    val id = params("ids")
+    recordsDAO.removeById(new ObjectId(id))
+    val items = recordsDAO.find(MongoDBObject.empty).sort(orderBy = MongoDBObject("addedAt" -> -1)).toList
     jade("index", "items" -> items)
   }
 //

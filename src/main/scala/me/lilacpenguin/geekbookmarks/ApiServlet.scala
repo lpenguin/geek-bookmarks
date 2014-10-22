@@ -26,11 +26,13 @@ class ApiServlet(recordsCollection: MongoCollection) extends GeekbookmarksStack 
     "status" -> "ok"
   }
 
-  post("/find"){
+  post("/findUrl"){
     val json = parse(request.body)
     val url = (json \\ "url").extract[String]
     "result" -> recordsDAO.findOne(MongoDBObject("url" -> url))
   }
+  
+  
 
   get("/tags"){
     val mapFunction = "" +

@@ -5,3 +5,16 @@
 .blog-title a {
     color: #333;
 }
+
+.remove-button{
+  float: right;
+  display: none;
+  cursor: pointer;
+}
+.post-title .remove-link{
+  color: black;
+}
+
+.post:hover .remove-button{
+  display: block;
+}
