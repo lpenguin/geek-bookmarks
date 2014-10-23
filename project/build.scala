@@ -16,7 +16,6 @@ object GeekbookmarksBuild extends Build {
   val ScalatraVersion = "2.3.0"
 
   val myAssemblySettings = assemblySettings ++ Seq(
-
     // handle conflicts during assembly task
     mergeStrategy in assembly <<= (mergeStrategy in assembly) {
       (old) => {
