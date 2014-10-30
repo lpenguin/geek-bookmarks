@@ -2,7 +2,6 @@ package me.lilacpenguin.geekbookmarks
 
 import com.mongodb.casbah.Imports._
 import me.lilacpenguin.geekbookmarks.data.models.{RecordDAO, Record}
-import org.json4s.JsonAST.JArray
 import org.json4s.{DefaultFormats, Formats}
 import org.scalatra.json.JacksonJsonSupport
 import org.slf4j.{Logger, LoggerFactory}
@@ -13,6 +12,7 @@ class ApiServlet(recordsCollection: MongoCollection) extends GeekbookmarksStack 
   val logger = LoggerFactory.getLogger(getClass)
   val recordsDAO = new RecordDAO(recordsCollection)
   before() {
+    logger.info(request.uri+" with body: \n"+request.body)
     contentType = formats("json")
   }
 
@@ -29,10 +29,10 @@ class ApiServlet(recordsCollection: MongoCollection) extends GeekbookmarksStack 
   post("/findUrl"){
     val json = parse(request.body)
     val url = (json \\ "url").extract[String]
-    "result" -> recordsDAO.findOne(MongoDBObject("url" -> url))
+    val r = recordsDAO.findOne(MongoDBObject("url" -> url))
+
+    "result" -> (if(r.isEmpty) null else r.get)
   }
-  
-  
 
   get("/tags"){
     val mapFunction = "" +
@@ -45,7 +45,6 @@ class ApiServlet(recordsCollection: MongoCollection) extends GeekbookmarksStack 
 	  val reduceFunction = "function(tag, values){ \n" +
           " return Array.sum(values); \n" +
           " }"
-   val json = ("name" -> "joe") ~ ("age" -> 35)
     val result = recordsCollection.mapReduce(mapFunction, reduceFunction, MapReduceInlineOutput)
     
     /*" */
