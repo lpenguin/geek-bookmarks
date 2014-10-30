@@ -31,7 +31,7 @@ class ApiServlet(recordsCollection: MongoCollection) extends GeekbookmarksStack 
     val url = (json \\ "url").extract[String]
     val r = recordsDAO.findOne(MongoDBObject("url" -> url))
 
-    "result" -> (if(r.isEmpty) null else r.get)
+    ("status" -> "ok") ~ ("result" -> (if(r.isEmpty) null else r.get))
   }
 
   get("/tags"){
