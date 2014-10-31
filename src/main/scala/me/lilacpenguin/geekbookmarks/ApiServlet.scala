@@ -2,22 +2,34 @@ package me.lilacpenguin.geekbookmarks
 
 import com.mongodb.casbah.Imports._
 import me.lilacpenguin.geekbookmarks.data.models.{RecordDAO, Record}
-import org.json4s.{DefaultFormats, Formats}
+import org.json4s._
 import org.scalatra.json.JacksonJsonSupport
 import org.slf4j.{Logger, LoggerFactory}
 import org.json4s.JsonDSL._
+import me.lilacpenguin.geekbookmarks.data.models.Record
+import org.json4s.JsonAST.{JValue, JObject}
 
 class ApiServlet(recordsCollection: MongoCollection) extends GeekbookmarksStack with JacksonJsonSupport {
   protected implicit val jsonFormats: Formats = DefaultFormats
   val logger = LoggerFactory.getLogger(getClass)
   val recordsDAO = new RecordDAO(recordsCollection)
+  
+  def recordToJObject(r: Option[Record]):JValue = {
+
+    r match {
+      case Some(record) => Extraction decompose record
+      case None => JNull
+    }
+  }
+  
   before() {
     logger.info(request.uri+" with body: \n"+request.body)
     contentType = formats("json")
   }
 
-  get("/records"){
-    recordsDAO.find(MongoDBObject.empty).toList
+  get("/records/?"){
+    val records = recordsDAO.find(MongoDBObject()).toList
+    ("status" -> "ok") ~ ("records" -> Extraction.decompose(records))
   }
 
   post("/addLink"){
@@ -30,8 +42,7 @@ class ApiServlet(recordsCollection: MongoCollection) extends GeekbookmarksStack 
     val json = parse(request.body)
     val url = (json \\ "url").extract[String]
     val r = recordsDAO.findOne(MongoDBObject("url" -> url))
-
-    ("status" -> "ok") ~ ("result" -> (if(r.isEmpty) null else r.get))
+    ("result" -> recordToJObject(r)) ~ ("status" -> "ok")
   }
 
   get("/tags"){
@@ -47,7 +58,7 @@ class ApiServlet(recordsCollection: MongoCollection) extends GeekbookmarksStack 
           " }"
     val result = recordsCollection.mapReduce(mapFunction, reduceFunction, MapReduceInlineOutput)
     
-    /*" */
+
     ("result" -> result.map(o => {
       ("tag" -> o.getAs[String]("_id")) ~ ("count" -> o.getAs[String]("value"))
     }).toList) ~ ("status" -> "ok")

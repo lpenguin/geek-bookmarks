@@ -1,0 +1,4 @@
+url: ${proto}://${host}/api/findUrl
+method: post
+body:
+    url: ${url}
