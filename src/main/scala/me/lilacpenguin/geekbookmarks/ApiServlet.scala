@@ -32,13 +32,18 @@ class ApiServlet(recordsCollection: MongoCollection) extends GeekbookmarksStack 
     ("status" -> "ok") ~ ("records" -> Extraction.decompose(records))
   }
 
-  post("/addLink"){
+  post("/addLink/?"){
     val json = parse(request.body)
-    recordsDAO.insert(json.extract[Record])
+    val record = json.extract[Record]
+    recordsDAO.findOne(MongoDBObject("url" -> record.url)) match {
+      case Some(oldRecord) => recordsDAO.update(MongoDBObject("url" -> record.url), record, upsert = false, multi = false, recordsDAO.defaultWriteConcern)
+      case None => recordsDAO insert record
+    }
+
     "status" -> "ok"
   }
 
-  post("/findUrl"){
+  post("/findUrl/?"){
     val json = parse(request.body)
     val url = (json \\ "url").extract[String]
     val r = recordsDAO.findOne(MongoDBObject("url" -> url))
