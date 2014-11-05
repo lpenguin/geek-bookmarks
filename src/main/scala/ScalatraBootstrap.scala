@@ -15,6 +15,7 @@ class ScalatraBootstrap extends LifeCycle {
     context.mount(new HtmlServlet(records), "/*")
   }
   override def destroy(context: ServletContext) {
+    //Foo bar
     mongoClient.close
   }
 }
