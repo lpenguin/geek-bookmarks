@@ -1,4 +1,5 @@
 #!/bin/bash
+echo "Webhook"
 serviceDir="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 cd $serviceDir
 git checkout master
