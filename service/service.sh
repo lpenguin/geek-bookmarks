@@ -1,7 +1,27 @@
 #!/bin/bash
+
+
+
 function getVersion(){
   grep 'val Version' $rootDir/project/build.scala | sed 's/ *val Version = //' | sed 's/"//g'
 }
+
+function start(){
+  echo $pidFile
+  echo $serviceJar
+  echo $$ > $pidFile
+  nohup java -jar $serviceJar </dev/null </dev/null > $logFile 2>&1 &
+}
+
+function stop(){
+  if [[ -f $pidFile ]] ; then
+    kill -9 $(cat $pidFile)
+    rm -rf $pidFile
+  else
+    echo "Pid file is not exists"
+  fi
+}
+
 project=geek-bookmarks
 scalaVersion=scala-2.11
 
@@ -12,12 +32,17 @@ pidFile=$serviceDir/servive.pid
 logFile=$serviceDir/service.log
 packageVersion=$(getVersion)
 serviceJar=$targetDir/$scalaVersion/$project-assembly-$packageVersion.jar
-echo $serviceJar
 
-function start(){
-  nohup java -Dpidfile=$pidFile -jar $serviceJar </dev/null > $logFile 2>&1
-}
 
-function stop(){
-  kill -9 $(cat $pidFile)
-}
+for option in "$@" ; do
+  case $option in
+    start)
+    echo "Starting service"
+    start
+    ;;
+    stop)
+      echo "Stopping service"
+      stop
+    ;;
+  esac
+done
