@@ -29,6 +29,18 @@ class HtmlServlet(records: MongoCollection) extends GeekbookmarksStack {
     val items = recordsDAO.find(MongoDBObject.empty).sort(orderBy = MongoDBObject("addedAt" -> -1)).toList
     jade("index", "items" -> items)
   }
+
+  get("/search"){
+    val search = params("search")
+    val query = $or(
+      "tags" $in (search, ""),
+      "name" $regex (".*"+search+".*"),
+      "description" $regex (".*"+search+".*"),
+      "url" $regex (".*"+search+".*")
+    )
+    val items = recordsDAO.find(query).toList
+    jade("index", "items" -> items, "search" -> search)
+  }
 //
 //  get("/tags/:tag"){
 //    val tagId = params("tag").toInt

@@ -1,6 +1,7 @@
 -@ val title: String
 -@ val headline: String = title
 -@ val body: String
+-@ val search: String = ""
 
 !!!
 html
@@ -11,9 +12,15 @@ html
     link(href="/css/geekbm.css" rel="stylesheet")
   body
     .container
-      .blog-header
-        h1.blog-title
-          a(href="/") =headline
+      nav.navbar.navbar-default.col-sm-8(role="navigation")
+        .container-fluid
+          .navbar-header
+            a.navbar-brand(href="/") Geekbookmarks
+          .collapse.navbar-collapse
+            form.navbar-form.navbar-left(role="search" action="/search" method="get")
+              .form-group
+                input.form-control(type="text" placeholder="Search" name="search" value="#{search}")
+              button.btn.btn-default(type="submit") Submit
 
       .row
         .col-sm-8
