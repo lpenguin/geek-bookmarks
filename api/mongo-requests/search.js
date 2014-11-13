@@ -1,1 +1,1 @@
-db.records.find({ $or: [{name: /.*fif.*/}, {tags: {$in: ["test"]}}]})
+db.records.find({ "$or" : [ { "description" : { "$regex" : ".*asd.*"}}]})
