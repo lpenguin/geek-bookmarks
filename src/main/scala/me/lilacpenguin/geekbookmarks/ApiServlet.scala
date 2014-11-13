@@ -32,6 +32,18 @@ class ApiServlet(recordsCollection: MongoCollection) extends GeekbookmarksStack 
     ("status" -> "ok") ~ ("records" -> Extraction.decompose(records))
   }
 
+  get("/group-tags/?"){
+    val query = MongoDBObject( "tags" ->
+      MongoDBObject(
+        "$not" -> MongoDBObject("$size" -> 0)
+      )
+    )
+
+    val projection =  MongoDBObject("tags" -> 1, "_id" -> 0)
+    val res = recordsCollection.find(query, projection)
+    com.mongodb.util.JSON serialize res.map(x => x.getAs[MongoDBList]("tags").get).toList
+  }
+
   post("/addLink/?"){
     val json = parse(request.body)
     val record = json.extract[Record]
