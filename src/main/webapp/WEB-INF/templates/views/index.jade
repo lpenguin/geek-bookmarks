@@ -16,8 +16,13 @@
 
     p.post-meta
       =item.addedAt
+      a.text-muted.host-url(href="http://#{item.host()}") 
+        i.glyphicon.glyphicon-link
+        =item.host()
+      
       -for(tag <- item.tags)
         a.badge(href="/tags/#{tag}") =tag
+      
     p.post-meta =item.description
 
     hr

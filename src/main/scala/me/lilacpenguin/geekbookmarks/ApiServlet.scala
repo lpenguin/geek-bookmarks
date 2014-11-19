@@ -39,7 +39,7 @@ class ApiServlet(recordsCollection: MongoCollection) extends GeekbookmarksStack 
       )
     )
 
-    val projection =  MongoDBObject("tags" -> 1, "_id" -> 0)
+    val projection = MongoDBObject("tags" -> 1, "_id" -> 0)
     val res = recordsCollection.find(query, projection)
     com.mongodb.util.JSON serialize res.map(x => x.getAs[MongoDBList]("tags").get).toList
   }

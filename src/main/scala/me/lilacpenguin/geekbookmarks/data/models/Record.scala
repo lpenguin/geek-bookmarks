@@ -1,5 +1,6 @@
 package me.lilacpenguin.geekbookmarks.data.models
 
+import java.net.URI
 import java.util.Date
 
 import com.mongodb.casbah.{MongoCollection}
@@ -21,6 +22,7 @@ case class Record(
              tags:List[String],
              addedAt:Date = new Date()
 ) {
+  def host():String = new URI(url).getHost.replaceFirst("www\\.", "")
 }
 
 class RecordDAO(collection: MongoCollection) extends SalatDAO[Record, ObjectId](collection)

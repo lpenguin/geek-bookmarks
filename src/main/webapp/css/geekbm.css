@@ -18,3 +18,8 @@
 .post:hover .remove-button{
   display: block;
 }
+
+.host-url {
+  font-size: 10pt;
+  margin-right: 5px;
+}
